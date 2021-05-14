@@ -1,0 +1,32 @@
+<# #>
+$global:Session = $null <#global variable session#>
+
+  function start-ES { <#if powershell session is not closed, continue without entering credentials#>
+
+      if ($global:Session.State -eq "Opened") {
+        write-host "Session is already in Opened State"
+       }
+             Else {
+                      start-MySession
+                      if ($global:Session.State -eq "Opened") {
+                      write-host "YAYYYY!!! Session is now opened. Enjoy Scripting!!!!!!!!!!"
+                      }
+                  }
+  }
+
+
+
+<#creating a new session#>
+
+function start-MySession {
+  $UserCredential = Get-Credential
+  
+  $global:Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -allowRedirection
+  
+  Import-PSSession $Session -DisableNameChecking
+  
+<#  write-host $global:Session.State  <#returns if the session is open or broken#>  
+#>
+  }
+
+ 
